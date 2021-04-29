@@ -1,0 +1,27 @@
+.adjust{
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-direction: row; */
+}
+.adjust-flex{
+    width: 30%;
+    margin: 10px;
+}
+img{
+    width: 200px;
+    height: 400px;  
+}
+.btn-del{
+    float: right;
+    margin-top: -7px;
+}
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    color: #2b7299;
+    font-weight: bold;
+}
+.card .card-content p {
+    font-weight: bold;
+}
+.card .card-image .card-title {
+    font-weight: bold;
+}

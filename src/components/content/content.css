@@ -14,6 +14,7 @@ img{
 .btn-del{
     float: right;
     margin-top: -7px;
+    margin-left:1%;
 }
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
     color: #2b7299;

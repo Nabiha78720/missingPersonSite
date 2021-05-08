@@ -10,7 +10,6 @@ export default function SignUp() {
     let resp = await axios.post('/signup',data);
     var signupModal=M.Modal.init(document.getElementById('modal2'),{});
     signupModal.close();
-    // console.log(resp);
   };
   return<div className="container-signup modal" id="modal2" >
     <div className="row">

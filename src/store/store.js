@@ -6,13 +6,10 @@ function SiteUserReducer(oldData=initialData,newData){
     if(newData.type=='LOGIN_OK'){
         oldData.siteUser =  newData.payload
     }
-    // if(newData.type=='ADD_USER'){
-    //     oldData.siteUser =  newData.payload
-    // }
     if(newData.type=='LOGOUT'){
         oldData.siteUser = {};
     }
-    console.log(oldData);
+    // console.log(oldData);
 
     localStorage.setItem('reduces', JSON.stringify(oldData))
 

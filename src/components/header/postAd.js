@@ -4,24 +4,18 @@ import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { connect } from 'react-redux';
 import myStore from '../../store/store';
-import { PinDropSharp } from '@material-ui/icons';
-import { Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 function PostAd(props) {
-   // console.log(props);
-
+   let navigate = useNavigate();
    const { register, handleSubmit, watch, errors } = useForm();
    const onSubmit = async (data) => {
-      // console.log(data)
       data.missingPic = data.missingPic[0]
       let fm = new FormData();
       for (let item in data) {
          fm.append(item, data[item])
-         // console.log(item, data[item])
       }
-      // console.log(data.missingPic);
       let resp = await axios.post('/postad', fm,);
-      // console.log(resp);
-      props.history.push('/');
+      navigate('/');
    };
    return <> 
       { localStorage.getItem('token') ? <div className='full'>
@@ -80,7 +74,10 @@ function PostAd(props) {
                </div>
             </div>
          </div>
-      </div> : <Redirect to='/' />}
+      </div> :
+      navigate('/')
+     
+       }
       </>
    }
    export default connect((myStore) => {

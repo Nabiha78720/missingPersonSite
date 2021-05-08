@@ -1,33 +1,34 @@
-let express= require('express');
-let myApp=express();
+let express = require('express');
+let myApp = express();
+let fs = require('fs');
+let path = require('path');
 
-var multer  = require('multer');
-// var upload = multer({ dest: 'E:/All Projects/gamica projects/missing-person-site/server/allData/uploads/' });
+var multer = require('multer');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'E:/All Projects/gamica projects/missing-person-site/server/allData/uploads/')
+        cb(null, './server/allData/uploads/')
     },
     filename: function (req, file, cb) {
         // console.log(file)
-      cb(null, file.originalname )
+        cb(null, file.originalname)
     }
 })
-   
+
 var upload = multer({ storage: storage })
 
-let BodyParser= require('body-parser');
+let BodyParser = require('body-parser');
 myApp.use(BodyParser.json());
 
-let config= require('./config');
+let config = require('./config');
 let jwt = require('jsonwebtoken');
 const jwt_decode = require('jwt-decode');
 
-let mongoose=require('mongoose');
+let mongoose = require('mongoose');
 let SiteUsers = require('.//db/models/users');
 let MissingPersons = require('.//db/models/missingPersons');
 
-mongoose.connect('mongodb://localhost:27017/SiteUser',(err,connection)=>{
+mongoose.connect('mongodb://localhost:27017/SiteUser', (err, connection) => {
     console.log(err || connection);
 });
 
@@ -35,34 +36,27 @@ mongoose.connect('mongodb://localhost:27017/SiteUser',(err,connection)=>{
 //     res.end('Main')
 // });
 
-myApp.post('/checksession', async function(req, res){
-    console.log(req.body.token);
-    // let resp = await jwt.verify(req.body.token, config.secret);
+myApp.post('/checksession', async function (req, res) {
     var decoded = jwt_decode(req.body.token);
-    console.log(decoded);
-    if(decoded.id){
-        SiteUsers.findOne({_id:decoded.id}, function (err, docs) {
+    if (decoded.id) {
+        SiteUsers.findOne({ _id: decoded.id }, function (err, docs) {
             res.send(docs);
         });
     }
- });
+});
 
-myApp.post('/signup', async function(req, res){
-    // console.log(req.body)
-    let user =new SiteUsers();
-    user.name= req.body.name,
-    user.email=req.body.email,
-    user.password=req.body.password,
-    await user.save();
+myApp.post('/signup', async function (req, res) {
+    let user = new SiteUsers();
+    user.name = req.body.name,
+        user.email = req.body.email,
+        user.password = req.body.password,
+        await user.save();
     res.json({
-        msg:"Nabiha"
+        msg: "Nabiha"
     });
 });
-myApp.post('/login', async function(req, res){
-    // console.log(req.body);
-    let user = await SiteUsers.findOne({ email: req.body.email,password:req.body.password})
-    // console.log(SiteUsers)
-    // console.log(user)
+myApp.post('/login', async function (req, res) {
+    let user = await SiteUsers.findOne({ email: req.body.email, password: req.body.password })
 
     if (user) {
         let userToken = { id: user._id }
@@ -72,69 +66,108 @@ myApp.post('/login', async function(req, res){
             res.json({
                 token,
                 success: true,
-                msg:"User Found",
+                msg: "User Found",
                 _id: user._id,
                 name: user.name,
-                password:user.password,
+                password: user.password,
                 email: user.email
             })
         });
-    }else{
+    } else {
         res.json({
-            msg:'User Not Found'
+            msg: 'User Not Found'
         })
     }
 });
 
-myApp.post('/postad', upload.single('missingPic'), async function(req, res){
-    // console.log(req.body)
-    // console.log(req.file);
+myApp.post('/postad', upload.single('missingPic'), async function (req, res) {
     let mpeople = new MissingPersons();
-    mpeople.referenceId=req.body.id,
-    mpeople.mPersonName= req.body.missingName,
-    mpeople.mPersonAge=req.body.missingAge,
-    mpeople.mPersonDescription=req.body.missingDescription,
-    mpeople.mPersonPic=req.file.filename,
-    
-    // console.log(mpeople),
-    await mpeople.save();
-    // console.log(adData.missingPic),
-    // console.log(SiteUsers)
-    res.json({
-        msg:"Nabiha"
+    mpeople.referenceId = req.body.id,
+        mpeople.mPersonName = req.body.missingName,
+        mpeople.mPersonAge = req.body.missingAge,
+        mpeople.mPersonDescription = req.body.missingDescription,
+        mpeople.mPersonPic = req.file.filename,
+        await mpeople.save();
+        res.json({
+        msg: "Nabiha"
     });
 });
 
-myApp.post('/cards',async function(req,res){
-    // console.log(req.body)
+myApp.post('/cards', async function (req, res) {
     MissingPersons.find({}, function (err, mpeople) {
         res.send(mpeople);
     });
 })
-myApp.post('/delete',async function(req,res){
-    console.log(req.body)
-    MissingPersons.findOneAndDelete({referenceId: req.body.delId ,_id: req.body.delPersonId },function (err, docs) {
-        if (err){
+myApp.post('/delete', async function (req, res) {
+    let user = await MissingPersons.findById(req.body.delPersonId);
+    fs.unlink( path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic),(err)=>{})
+    
+    MissingPersons.findOneAndDelete({ referenceId: req.body.delId, _id: req.body.delPersonId }, function (err, docs) {
+        if (err) {
             console.log(err)
         }
-        else{
+        else {
             console.log("Deleted User : ", docs);
         }
     })
+    
     MissingPersons.find({}, function (err, mpeople) {
         res.send(mpeople);
     });
-    
+
 })
-myApp.post('/search',async function(req,res){
-    // console.log(req.body.mPersonName)
-    const regex = new RegExp(req.body.mPersonName, 'i')
-    MissingPersons.find({mPersonName: regex}, function (err, mpeople) {
-        res.send(mpeople);
+myApp.post('/search', async function (req, res) {
+    if (req.body.mPersonName == null) {
+        MissingPersons.find({}, function (err, mpeople) {
+            res.send(mpeople);
+        });
+    } else {
+        const regex = new RegExp(req.body.mPersonName, 'i')
+        MissingPersons.find({ mPersonName: regex }, function (err, mpeople) {
+            res.send(mpeople);
+        });
+    }
+});
+myApp.post('/updatevalues', async function (req, res) {
+    MissingPersons.findOne({ _id: req.body.id }, function (err, docs) {
+        res.send(docs);
     });
-    
+
+});
+myApp.post('/updatead', upload.single('missingPic'), async function (req, res) {
+    let name = req.body.missingName;
+    let age = req.body.missingAge;
+    let desc = req.body.missingDescription;
+    let pic = req.file.originalname;
+    if (name == '') { name = req.body.mPersonName }
+    if (age == '') { age = req.body.mPersonAge }
+    if (desc == '') { desc = req.body.mPersonDescription }
+    if (pic == '[object FileList]') { pic = req.body.mPersonPic }
+
+    let user = await MissingPersons.findById(req.body.id);
+    if (user.mPersonPic != req.file.originalname) {
+        fs.unlink( path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic),(err)=>{
+
+        })
+    }
+    MissingPersons.findByIdAndUpdate(req.body.id, { mPersonName: name, mPersonAge: age, mPersonDescription: desc, mPersonPic: pic }, function (req, res) {
+        console.log('Updated' + res)
+    })
+    res.json({
+        msg: "Nabiha"
+    });
+});
+
+
+myApp.post('/detail/:id',async function(req,res){
+
+    await MissingPersons.findOne({ _id: req.params.id }, function (err, docs) {
+        res.send(docs);
+    });
 })
 
-myApp.listen(5050,function(){
+myApp.use(express.static('./server/allData/uploads'))
+
+myApp.listen(5050, function () {
     console.log('Server in Working State')
 })

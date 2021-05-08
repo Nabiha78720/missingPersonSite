@@ -6,25 +6,16 @@ import './login.css';
 import {connect} from 'react-redux';
 import myStore from '../../store/store';
 
-function Login(props) {
+function Login() {
     
     const { register, handleSubmit, watch, errors } = useForm();
     const onSubmit = async (data) =>{ 
-        // console.log(data)
         let resp = await axios.post('/login',data);
         var loginModal = M.Modal.init(document.getElementById('modal1'), {});
-
-
         loginModal.close();
-    
-        console.log(resp.data);
         if(resp.data.msg=='User Found'){
             localStorage.setItem('token', resp.data.token);
             localStorage.setItem('userId',resp.data.id);
-           
-            
-            props.setAppear(true);
-            // props.setSendId(resp.data.id);
             myStore.dispatch({
                 type : "LOGIN_OK",
                 payload:resp.data

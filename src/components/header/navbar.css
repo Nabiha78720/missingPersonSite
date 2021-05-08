@@ -1,13 +1,9 @@
-
-
-
 nav{
-    background-color: #2b7299;
+  background-color: #2b7299;
 }
 .post-ad{
     color:#2b7299 !important ;
 }
-
 .search-close-icon{
     display: none!important;
     position: absolute;

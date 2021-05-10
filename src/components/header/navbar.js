@@ -1,14 +1,11 @@
-import React,{useEffect, useState} from 'react';
+import React,{ useState} from 'react';
 import './navbar.css';
 import M from 'materialize-css';
 import Login from './login';
 import SignUp from './signup';
 import {Link} from 'react-router-dom';
-import PostAd from './postAd';
 import {connect} from 'react-redux';
 import myStore from '../../store/store';
-import { Search } from '@material-ui/icons';
-import keydown from 'react-keydown';
 import axios from 'axios';
 
 

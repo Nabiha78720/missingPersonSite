@@ -135,21 +135,29 @@ myApp.post('/updatevalues', async function (req, res) {
 
 });
 myApp.post('/updatead', upload.single('missingPic'), async function (req, res) {
+    console.log(req.body);
     let name = req.body.missingName;
     let age = req.body.missingAge;
     let desc = req.body.missingDescription;
-    let pic = req.file.originalname;
+    let pic='';
+    if(req.file){
+        pic = req.file.originalname;
+    }
+    
     if (name == '') { name = req.body.mPersonName }
     if (age == '') { age = req.body.mPersonAge }
     if (desc == '') { desc = req.body.mPersonDescription }
-    if (pic == '[object FileList]') { pic = req.body.mPersonPic }
+    if (pic == '') { pic = req.body.mPersonPic }
 
     let user = await MissingPersons.findById(req.body.id);
-    if (user.mPersonPic != req.file.originalname) {
-        fs.unlink( path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic),(err)=>{
-
-        })
+    if(req.file && req.file.originalname){
+        if (user.mPersonPic != req.file.originalname) {
+            fs.unlink( path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic),(err)=>{
+    
+            })
+        }
     }
+  
     MissingPersons.findByIdAndUpdate(req.body.id, { mPersonName: name, mPersonAge: age, mPersonDescription: desc, mPersonPic: pic }, function (req, res) {
         console.log('Updated' + res)
     })

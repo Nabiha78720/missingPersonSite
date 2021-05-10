@@ -3,8 +3,7 @@ import './postad.css';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { connect } from 'react-redux';
-import myStore from '../../store/store';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 function PostAd(props) {
    let navigate = useNavigate();
    const { register, handleSubmit, watch, errors } = useForm();

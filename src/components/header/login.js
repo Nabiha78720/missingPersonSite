@@ -15,7 +15,7 @@ function Login() {
         loginModal.close();
         if(resp.data.msg=='User Found'){
             localStorage.setItem('token', resp.data.token);
-            localStorage.setItem('userId',resp.data.id);
+            localStorage.setItem('userId',resp.data._id);
             myStore.dispatch({
                 type : "LOGIN_OK",
                 payload:resp.data

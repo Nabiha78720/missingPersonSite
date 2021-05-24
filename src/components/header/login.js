@@ -7,12 +7,17 @@ import {connect} from 'react-redux';
 import myStore from '../../store/store';
 
 function Login() {
-    
+    function clear(){
+        document.getElementById('loginForm').reset();
+    }
     const { register, handleSubmit, watch, errors } = useForm();
     const onSubmit = async (data) =>{ 
-        let resp = await axios.post('/login',data);
+        let resp = await axios.post(window.ip+'/login',data);
         var loginModal = M.Modal.init(document.getElementById('modal1'), {});
         loginModal.close();
+        clear();
+        
+        
         if(resp.data.msg=='User Found'){
             localStorage.setItem('token', resp.data.token);
             localStorage.setItem('userId',resp.data._id);
@@ -31,7 +36,7 @@ function Login() {
                     <div className="container-login">
                         <div className="z-depth-1 grey lighten-4 row" style={{ display: 'inline-block', padding: '32px 48px 0px 48px', border: '1px solid #EEE' }}>
 
-                            <form onSubmit={handleSubmit(onSubmit)} className="col s12" method="post">
+                            <form id='loginForm' onSubmit={handleSubmit(onSubmit)} className="col s12" method="post">
                                 <div className='row'>
                                     <div className='col s12'>
                                     </div>

@@ -17,3 +17,13 @@
 .indigo {
     background-color: #26a69a !important;
 }
+@media only screen and (max-width: 590px) {
+    .modal{
+        width:auto !important;
+    }
+}
+@media only screen and (max-width: 480px) {
+    .modal{
+        width:auto !important;
+    }
+}

@@ -13,7 +13,7 @@ function PostAd(props) {
       for (let item in data) {
          fm.append(item, data[item])
       }
-      let resp = await axios.post('/postad', fm,);
+      let resp = await axios.post(window.ip+'/postad', fm,);
       navigate('/');
    };
    return <> 

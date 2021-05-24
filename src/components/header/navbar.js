@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import myStore from '../../store/store';
 import axios from 'axios';
+import { HelpOutline } from '@material-ui/icons';
 
 
 function NavBar(props){
@@ -17,7 +18,6 @@ function NavBar(props){
       <nav class="nav-extended  pushpin z-depth-3">
         <div className="nav-wrapper">
           <input id="search-input" placeholder="Search" type="text" class="browser-default search-field" name="q" autocomplete="off" aria-label="Search box"
-         on
           onInput={async(evt)=>{
             setSearchName({
               ...searchName,
@@ -27,20 +27,19 @@ function NavBar(props){
               mPersonName:searchName.name,
             }
             console.log(data.mPersonName);
-            let resp = await axios.post('/search',data);
+            let resp = await axios.post(window.ip+'/search',data);
             props.setCards(resp.data);
             console.log(resp.data);
           }}
           />
-          <label for="search-input">
-            </label> 
-          <i class="material-icons search-close-icon">cancel</i>
 
           <a onClick={()=>{
           var drawer = M.Sidenav.init(document.querySelectorAll('.sidenav'), {});
           }}  data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
           <ul className="right hide-on-med-and-down">
+          <li style={props.SiteUserReducer.siteUser._id? {display:'block'}:{display:'none'}}><span className='hello'>Hello..!  </span><span className='user'>{props.SiteUserReducer.siteUser.name}</span></li>
+            
             <li style={props.SiteUserReducer.siteUser._id? {display:'block'}:{display:'none'}}><Link to='/postad'><a className="waves-effect waves-light btn-small btn modal-trigger">Post Ad</a></Link></li>
 
             <li style={props.SiteUserReducer.siteUser._id? {display:'block'}:{display:'none'}}><a className="waves-effect waves-light btn-small btn modal-trigger" onClick={()=>{

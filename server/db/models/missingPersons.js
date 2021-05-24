@@ -1,7 +1,10 @@
 let mongoose = require('mongoose');
 
 let missingPersonSchema=mongoose.Schema({
-    referenceId:String,
+    referenceId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     mPersonName:String,
     mPersonAge:Number,
     mPersonPic:String,

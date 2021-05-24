@@ -1,14 +1,13 @@
-import React ,{useState,useEffect} from 'react';
+import React ,{useEffect} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import myStore from '../../store/store';
 import './content.css';
-import {Link,Outlet} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 
 function Cards(props){
   useEffect(async function(){
-    let resp = await axios.post('/cards');
+    let resp = await axios.post(window.ip+'/cards');
     props.setCards(resp.data);
   },[]);
 
@@ -37,7 +36,7 @@ function Cards(props){
                       delId:card.referenceId,
                       delPersonId: card._id
                     }
-                    let resp = await axios.post('/delete',data);
+                    let resp = await axios.post(window.ip+'/delete',data);
                     props.setCards(resp.data);
                     console.log(resp.data);
                   }

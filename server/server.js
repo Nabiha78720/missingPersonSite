@@ -1,5 +1,7 @@
 let express = require('express');
+var cors= require('cors');
 let myApp = express();
+myApp.use(cors());
 let fs = require('fs');
 let path = require('path');
 
@@ -48,9 +50,10 @@ myApp.post('/checksession', async function (req, res) {
 myApp.post('/signup', async function (req, res) {
     let user = new SiteUsers();
     user.name = req.body.name,
-        user.email = req.body.email,
-        user.password = req.body.password,
-        await user.save();
+    user.email = req.body.email,
+    user.password = req.body.password,
+    user.contact=req.body.contact,
+    await user.save();
     res.json({
         msg: "Nabiha"
     });
@@ -70,7 +73,8 @@ myApp.post('/login', async function (req, res) {
                 _id: user._id,
                 name: user.name,
                 password: user.password,
-                email: user.email
+                email: user.email,
+                contact: user.contact
             })
         });
     } else {
@@ -82,7 +86,7 @@ myApp.post('/login', async function (req, res) {
 
 myApp.post('/postad', upload.single('missingPic'), async function (req, res) {
     let mpeople = new MissingPersons();
-    mpeople.referenceId = req.body.id,
+        mpeople.referenceId = req.body.id,
         mpeople.mPersonName = req.body.missingName,
         mpeople.mPersonAge = req.body.missingAge,
         mpeople.mPersonDescription = req.body.missingDescription,
@@ -169,12 +173,13 @@ myApp.post('/updatead', upload.single('missingPic'), async function (req, res) {
 
 myApp.post('/detail/:id',async function(req,res){
 
-    await MissingPersons.findOne({ _id: req.params.id }, function (err, docs) {
+    await MissingPersons.findOne({ _id: req.params.id }).populate('referenceId').exec(function (err, docs) {
         res.send(docs);
     });
 })
 
 myApp.use(express.static('./server/allData/uploads'))
+myApp.use(express.static('./server/build'))
 
 myApp.listen(5050, function () {
     console.log('Server in Working State')

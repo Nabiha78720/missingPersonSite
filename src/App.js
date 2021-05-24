@@ -37,7 +37,7 @@ function Home(){
     if (token!=null) {
       try {
 
-        let resp = await axios.post('/checksession', { token });
+        let resp = await axios.post(window.ip+'/checksession', { token });
         // console.log(resp.data);
         myStore.dispatch({
           type:"LOGIN_OK",

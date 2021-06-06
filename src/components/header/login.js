@@ -5,6 +5,7 @@ import M from 'materialize-css';
 import './login.css';
 import {connect} from 'react-redux';
 import myStore from '../../store/store';
+import Swal from 'sweetalert2';
 
 function Login() {
     function clear(){
@@ -25,6 +26,21 @@ function Login() {
                 type : "LOGIN_OK",
                 payload:resp.data
             });
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })     
+            Toast.fire({
+                icon: 'success',
+                title: 'Successfully Login'
+            })
         }else if(resp.data.msg=='User Not Found'){
             alert('Please Type valid User Name OR Password...!');
         }

@@ -29,10 +29,15 @@ const jwt_decode = require('jwt-decode');
 let mongoose = require('mongoose');
 let SiteUsers = require('.//db/models/users');
 let MissingPersons = require('.//db/models/missingPersons');
+mongoose.connect('mongodb+srv://Nabiha:1716221nabiha@cluster0.vxl4h.mongodb.net/FYP?retryWrites=true&w=majority', (err, connection) => {
 
-mongoose.connect('mongodb://localhost:27017/SiteUser', (err, connection) => {
     console.log(err || connection);
-});
+
+})
+
+// mongoose.connect('mongodb://localhost:27017/SiteUser', (err, connection) => {
+//     console.log(err || connection);
+// });
 
 // myApp.get('/', function(req, res){
 //     res.end('Main')
@@ -169,7 +174,6 @@ myApp.post('/updatead', upload.single('missingPic'), async function (req, res) {
         msg: "Nabiha"
     });
 });
-
 
 myApp.post('/detail/:id',async function(req,res){
 

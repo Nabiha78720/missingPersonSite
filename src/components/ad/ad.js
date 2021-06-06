@@ -22,7 +22,7 @@ function Card(props) {
     },[])
     return<div>
         <NavBar/>
-        <div class="card adjust-flex">
+        <div class="card adjust-flex-single">
             <div class="card-image">
                 <img  src={`/${card.mPersonPic}`}/>
                 <span class="card-title"><span>Name: </span>{card.mPersonName}</span>

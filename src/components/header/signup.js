@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import axios from 'axios';
 import M from 'materialize-css';
 import './signup.css';
+import Swal from 'sweetalert2';
+
 export default function SignUp() {
   function clear(){
     document.getElementById('reg-form').reset()
@@ -14,6 +16,21 @@ export default function SignUp() {
     var signupModal=M.Modal.init(document.getElementById('modal2'),{});
     signupModal.close();
     clear();
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+  })     
+  Toast.fire({
+      icon: 'success',
+      title: 'Signed in successfully'
+  })
   };
   return<div className="container-signup modal" id="modal2" >
     <div className="row">

@@ -29,6 +29,7 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "4.0.3",
     "redux": "^4.0.5",
+    "sweetalert2": "^11.0.11",
     "web-vitals": "^1.1.1",
     "yup": "^0.32.9"
   },
@@ -44,7 +45,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "http://192.168.0.105:5050",
+  "proxy": "http://192.168.0.104:5050",
   "browserslist": {
     "production": [
       ">0.2%",

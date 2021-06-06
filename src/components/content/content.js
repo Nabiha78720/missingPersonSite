@@ -18,7 +18,7 @@ function Cards(props){
           return<div class="card adjust-flex">
             <div class="card-image">
               <Link to={`/detail/${card._id}`} >
-                <img  src={`${card.mPersonPic}`}/>
+                <img className='image'  src={`${card.mPersonPic}`}/>
               </Link>
               <span class="card-title"><span>Name: </span>{card.mPersonName}</span>
             </div>

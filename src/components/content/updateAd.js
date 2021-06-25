@@ -11,7 +11,7 @@ function UpdateAd(props) {
    let navigate = useNavigate();
    let [updatevalues,setUpdateValues]= useState({});
    useEffect(async()=>{
-      let resp = await axios.post(window.ip+'/updatevalues', {id});
+      let resp = await axios.post('/updatevalues', {id});
       console.log(resp);
       setUpdateValues(resp.data)
    },[]);
@@ -29,7 +29,7 @@ console.log(updatevalues);
          fm.append(item, cData[item])
          console.log(item, data[item])
       }
-      let resp = await axios.post(window.ip+'/updatead', fm);
+      let resp = await axios.post('/updatead', fm);
       navigate('/')
    };
    return <> 

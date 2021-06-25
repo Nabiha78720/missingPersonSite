@@ -2,7 +2,15 @@
     width: 50%;
     margin: 10px;
 }
+.btncolor{
+    justify-content: center;
+    display: flex;
+}
 @media only screen and (max-width: 700px) {
+    .adjust-flex-single {
+        width: 90%;
+        margin: 10px;
+    }
     .adjust-flex{
         width: 95%;
         margin: 10px;

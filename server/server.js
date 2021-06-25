@@ -1,5 +1,5 @@
 let express = require('express');
-var cors= require('cors');
+var cors = require('cors');
 let myApp = express();
 myApp.use(cors());
 let fs = require('fs');
@@ -53,15 +53,25 @@ myApp.post('/checksession', async function (req, res) {
 });
 
 myApp.post('/signup', async function (req, res) {
-    let user = new SiteUsers();
-    user.name = req.body.name,
-    user.email = req.body.email,
-    user.password = req.body.password,
-    user.contact=req.body.contact,
-    await user.save();
-    res.json({
-        msg: "Nabiha"
+    let user1 = await SiteUsers.findOne({
+        email: req.body.email,
     });
+    if (user1) {
+        res.json({
+            msg: "Email Already in Use",
+        });
+    } else {
+        let user = new SiteUsers();
+        user.name = req.body.name,
+            user.email = req.body.email,
+            user.password = req.body.password,
+            user.contact = req.body.contact,
+            await user.save();
+
+        res.json({
+            msg: "Signed Up...!",
+        });
+    }
 });
 myApp.post('/login', async function (req, res) {
     let user = await SiteUsers.findOne({ email: req.body.email, password: req.body.password })
@@ -91,13 +101,13 @@ myApp.post('/login', async function (req, res) {
 
 myApp.post('/postad', upload.single('missingPic'), async function (req, res) {
     let mpeople = new MissingPersons();
-        mpeople.referenceId = req.body.id,
+    mpeople.referenceId = req.body.id,
         mpeople.mPersonName = req.body.missingName,
         mpeople.mPersonAge = req.body.missingAge,
         mpeople.mPersonDescription = req.body.missingDescription,
         mpeople.mPersonPic = req.file.filename,
         await mpeople.save();
-        res.json({
+    res.json({
         msg: "Nabiha"
     });
 });
@@ -109,8 +119,8 @@ myApp.post('/cards', async function (req, res) {
 })
 myApp.post('/delete', async function (req, res) {
     let user = await MissingPersons.findById(req.body.delPersonId);
-    fs.unlink( path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic),(err)=>{})
-    
+    fs.unlink(path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic), (err) => { })
+
     MissingPersons.findOneAndDelete({ referenceId: req.body.delId, _id: req.body.delPersonId }, function (err, docs) {
         if (err) {
             console.log(err)
@@ -119,7 +129,7 @@ myApp.post('/delete', async function (req, res) {
             console.log("Deleted User : ", docs);
         }
     })
-    
+
     MissingPersons.find({}, function (err, mpeople) {
         res.send(mpeople);
     });
@@ -148,25 +158,25 @@ myApp.post('/updatead', upload.single('missingPic'), async function (req, res) {
     let name = req.body.missingName;
     let age = req.body.missingAge;
     let desc = req.body.missingDescription;
-    let pic='';
-    if(req.file){
+    let pic = '';
+    if (req.file) {
         pic = req.file.originalname;
     }
-    
+
     if (name == '') { name = req.body.mPersonName }
     if (age == '') { age = req.body.mPersonAge }
     if (desc == '') { desc = req.body.mPersonDescription }
     if (pic == '') { pic = req.body.mPersonPic }
 
     let user = await MissingPersons.findById(req.body.id);
-    if(req.file && req.file.originalname){
+    if (req.file && req.file.originalname) {
         if (user.mPersonPic != req.file.originalname) {
-            fs.unlink( path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic),(err)=>{
-    
+            fs.unlink(path.resolve(__dirname + '/alldata/uploads/' + user.mPersonPic), (err) => {
+
             })
         }
     }
-  
+
     MissingPersons.findByIdAndUpdate(req.body.id, { mPersonName: name, mPersonAge: age, mPersonDescription: desc, mPersonPic: pic }, function (req, res) {
         console.log('Updated' + res)
     })
@@ -175,7 +185,7 @@ myApp.post('/updatead', upload.single('missingPic'), async function (req, res) {
     });
 });
 
-myApp.post('/detail/:id',async function(req,res){
+myApp.post('/detail/:id', async function (req, res) {
 
     await MissingPersons.findOne({ _id: req.params.id }).populate('referenceId').exec(function (err, docs) {
         res.send(docs);
@@ -185,6 +195,13 @@ myApp.post('/detail/:id',async function(req,res){
 myApp.use(express.static('./server/allData/uploads'))
 myApp.use(express.static('./server/build'))
 
-myApp.listen(5050, function () {
+myApp.use(express.static('./allData/uploads'))
+myApp.use(express.static('./build'))
+
+myApp.use("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./build", "index.html"));
+});
+
+myApp.listen(process.env.PORT || 5050, function () {
     console.log('Server in Working State')
 })

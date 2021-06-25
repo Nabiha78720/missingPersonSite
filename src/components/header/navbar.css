@@ -15,13 +15,15 @@ nav{
     cursor: pointer;
   }
   input.search-field {
+    right: 0;
+      padding: 8px 25px;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.54);
     border-radius: 2px;
     border: 0;
     border-radius: 5px;
     height: 36px;
-    padding: 8px 8px 8px 60px;
+    
     width: 200px;
     background: #f7f7f7;
     transition: background 0.2s, width .2s;
@@ -39,8 +41,9 @@ nav{
   }
   input.search-field:focus {
     outline: none;
-    width: 500px;
     color: #212121;
+    width: 200px;
+    
   }
   input.search-field:focus:hover {
     background: #f7f7f7;
@@ -243,16 +246,7 @@ nav{
 }
   
   @media only screen and (max-width: 600px) {
-    input.search-field {
-      right: 0;
-      padding: 8px 25px;
-    }
-    input.search-field:focus {
-      outline: none;
-      width: 200px;
-      color: #212121;
-    }
-    
+
     i.material-icons{
       left:6%;
     }
@@ -277,7 +271,6 @@ nav{
 
 @media only screen and (max-width: 541px) {
   .title{
-     
    display: none;
    
   }

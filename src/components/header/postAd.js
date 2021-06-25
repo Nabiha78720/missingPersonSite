@@ -8,12 +8,14 @@ function PostAd(props) {
    let navigate = useNavigate();
    const { register, handleSubmit, watch, errors } = useForm();
    const onSubmit = async (data) => {
+      console.log(data)
       data.missingPic = data.missingPic[0]
       let fm = new FormData();
       for (let item in data) {
          fm.append(item, data[item])
       }
-      let resp = await axios.post(window.ip+'/postad', fm,);
+      // console.log(fm);
+      let resp = await axios.post('/postad', fm);
       navigate('/');
    };
    return <> 

@@ -13,7 +13,7 @@ function Login() {
     }
     const { register, handleSubmit, watch, errors } = useForm();
     const onSubmit = async (data) =>{ 
-        let resp = await axios.post(window.ip+'/login',data);
+        let resp = await axios.post('/login',data);
         var loginModal = M.Modal.init(document.getElementById('modal1'), {});
         loginModal.close();
         clear();

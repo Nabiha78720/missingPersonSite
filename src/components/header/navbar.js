@@ -27,7 +27,7 @@ function NavBar(props) {
               mPersonName: searchName.name,
             }
             console.log(data.mPersonName);
-            let resp = await axios.post(window.ip + '/search', data);
+            let resp = await axios.post('/search', data);
             props.setCards(resp.data);
             console.log(resp.data);
           }}

@@ -12,8 +12,26 @@ export default function SignUp() {
   const { register, handleSubmit} = useForm();
   const onSubmit = async (data) =>{ 
     console.log(data)
-    let resp = await axios.post(window.ip+'/signup',data);
-    var signupModal=M.Modal.init(document.getElementById('modal2'),{});
+    let resp = await axios.post('/signup',data);
+    if(resp.data.msg=='Email Already in Use'){
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })     
+    Toast.fire({
+        icon: 'error',
+        title: resp.data.msg
+    })
+
+    }else if(resp.data.msg=='Signed Up...!'){
+      var signupModal=M.Modal.init(document.getElementById('modal2'),{});
     signupModal.close();
     clear();
     const Toast = Swal.mixin({
@@ -31,6 +49,8 @@ export default function SignUp() {
       icon: 'success',
       title: 'Signed in successfully'
   })
+    }
+    
   };
   return<div className="container-signup modal" id="modal2" >
     <div className="row">
